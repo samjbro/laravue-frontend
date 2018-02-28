@@ -1,0 +1,21 @@
+html {
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+a, a:link, a:visited {
+  color: darkslategrey;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
