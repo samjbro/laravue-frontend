@@ -1,5 +1,49 @@
+@import "~#/_variables";
+
 @mixin vertical-center() {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@mixin table-scroller() {
+    position: relative;
+    padding: 8px 24px;
+
+    table {
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    th {
+      font-weight: bold;
+    }
+
+    td, th {
+      padding: 8px;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    thead {
+      border-bottom: $borderBottom;
+    }
+
+    .scroller {
+      overflow: auto;
+      position: absolute;
+      top: 50px;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      overflow-y: scroll;
+
+      .item-container {
+        position: absolute;
+        left: 24px;
+        right: 24px;
+      }
+    }
 }

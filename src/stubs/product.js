@@ -1,4 +1,7 @@
+import category from './category';
+
 export default {
+    category,
     id: 1,
     name: 'Dummy Product',
     desc1: 'This is a dummy product',

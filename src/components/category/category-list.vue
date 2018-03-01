@@ -1,19 +1,17 @@
 <template>
-    <div class="main-scroll-wrap product-list-wrap">
+    <div class="main-scroll-wrap category-list-wrap">
         <table>
             <thead>
             <tr>
-                <th class="name">Product Name</th>
-                <th class="category">Category</th>
-                <th class="part-number">Part Number</th>
-                <th class="price">Price</th>
+                <th class="name">Category Name</th>
+                <th class="product-amount">No. of Products</th>
             </tr>
             </thead>
         </table>
         <virtual-scroller
                 class="scroller"
                 content-tag="table"
-                :items="productRows"
+                :items="categoryRows"
                 item-height="35"
                 :renderers="renderers"
         />
@@ -21,9 +19,10 @@
 </template>
 
 <script>
-    import ProductItem from './product-item';
+    import CategoryItem from './category-item';
 
     export default {
+        components: {CategoryItem},
         props: {
             items: {
                 type: Array,
@@ -33,9 +32,9 @@
         data() {
             return {
                 renderers: Object.freeze({
-                    product: ProductItem
+                    category: CategoryItem
                 }),
-                productRows: []
+                categoryRows: []
             }
         },
         watch: {
@@ -43,18 +42,18 @@
                 this.render();
             }
         },
+        mounted() {
+            this.render();
+        },
         methods: {
             render() {
-                this.productRows = this.items.map(product => {
+                this.categoryRows = this.items.map(category => {
                     return {
-                        type: 'product',
-                        product
+                        type: 'category',
+                        category
                     }
                 })
             }
-        },
-        mounted() {
-            this.render();
         }
     }
 </script>
@@ -63,24 +62,16 @@
     @import "~#/_variables";
     @import "~#/_mixins";
 
-    .product-list-wrap {
-       @include table-scroller();
+    .category-list-wrap {
+        @include table-scroller();
 
         td, th {
             &.name {
-                width: 30%;
+                width: 50%;
             }
 
-            &.category {
-                width: 20%;
-            }
-
-            &.part-number {
-                width: 20%;
-            }
-
-            &.price {
-                width: 15%;
+            &.product-amount {
+                width: 50%;
             }
         }
     }

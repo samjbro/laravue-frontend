@@ -1,7 +1,7 @@
 <template>
     <tr>
         <td class="name">{{product.name || ''}}</td>
-        <td class="category">unknown</td>
+        <td class="category">{{ product.category.name || ''}}</td>
         <td class="part-number">{{product.manufacturer_part_no || ''}}</td>
         <td class="price">£{{ price }}</td>
     </tr>

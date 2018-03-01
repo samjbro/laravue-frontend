@@ -1,15 +1,17 @@
 import {http} from '@/services';
-import {productStore} from '.';
+import {categoryStore, productStore} from '.';
 
 export const sharedStore = {
     state: {
-        products: []
+        products: [],
+        categories: []
     },
 
     init() {
         return new Promise((resolve, reject) => {
             http.get('data', ({data}) => {
                 this.state = Object.assign(this.state, data);
+                categoryStore.init(this.state.categories);
                 productStore.init(this.state.products);
                 resolve(data);
             }, error => {
