@@ -20,6 +20,10 @@ export const http = {
       return this.request('post', url, data, successCb, errorCb);
     },
 
+    delete(url, data = {}, successCb = null, errorCb = null) {
+      return this.request('delete', url, data, successCb, errorCb);
+    },
+
     init() {
         axios.interceptors.request.use(config => {
             config.headers.Authorization = `Bearer ${ls.get('jwt-token')}`;

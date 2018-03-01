@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import {http} from '@/services';
+import {event} from '@/utils';
 import {VirtualScroller} from 'vue-virtual-scroller';
 import './static-loader';
 
@@ -17,6 +18,7 @@ new Vue({
     components: {App},
     template: '<App/>',
     created() {
-        http.init()
+        event.init();
+        http.init();
     }
 });

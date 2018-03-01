@@ -11,8 +11,9 @@
 </template>
 
 <script>
-    import {sharedStore} from '@/stores';
+    import {sharedStore, userStore} from '@/stores';
     import {ls} from '@/services';
+    import {event, forceReloadWindow} from '@/utils';
     import MainWrapper from "@/components/main-wrapper.vue";
     import LoginForm from '@/components/auth/login-form.vue';
 
@@ -48,6 +49,16 @@
                 this.authenticated = true;
                 this.init();
             }
+        },
+
+        created() {
+            event.on({
+                async logout() {
+                    await userStore.logout();
+                    ls.remove('jwt-token');
+                    forceReloadWindow();
+                }
+            })
         }
     }
 </script>

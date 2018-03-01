@@ -19,15 +19,25 @@
                     Products
                 </router-link>
             </li>
+            <li>
+                <a @click.prevent="logout" class="logout">Log Out</a>
+            </li>
         </ul>
     </nav>
 </template>
 
 <script>
+    import {event} from '@/utils';
     export default {
         computed: {
             currentView() {
                 return this.$route.name;
+            }
+        },
+
+        methods: {
+            logout() {
+                event.emit('logout');
             }
         }
     }
@@ -82,6 +92,10 @@
 
                 &.products::after {
                     content: "\f02b";
+                }
+
+                &.logout::after {
+                    content: "\f08b";
                 }
             }
         }
