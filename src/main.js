@@ -4,9 +4,11 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import {http} from '@/services';
+import {VirtualScroller} from 'vue-virtual-scroller';
 import './static-loader';
 
 Vue.config.productionTip = false
+Vue.component('virtual-scroller', VirtualScroller);
 
 /* eslint-disable no-new */
 new Vue({
