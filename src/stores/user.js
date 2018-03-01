@@ -14,6 +14,8 @@ export const userStore = {
             http.delete('logout', {}, ({data}) => {
                 resolve(data);
             }, error => {
+                console.log('logout failed');
+                console.log(error);
                 reject(error)
             });
         })

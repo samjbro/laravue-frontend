@@ -1,5 +1,7 @@
 import axios from 'axios';
 import {ls} from '.';
+import {event} from '@/utils';
+import {forceReloadWindow} from "../utils";
 
 export const http = {
     request(method, url, data, successCb = null, errorCb = null) {
@@ -35,7 +37,14 @@ export const http = {
             token && ls.set('jwt-token', token);
             return response;
         }, error => {
-            console.log(error);
+            console.log('http.init failed');
+            if (error.response.status === 400 || error.response.status === 401) {
+                if (!(error.config.method === 'post' && /\/api\/login\/?$/.test(error.config.url))) {
+                    ls.remove('jwt-token');
+                    forceReloadWindow();
+                }
+            }
+
             return Promise.reject(error);
         })
     }
