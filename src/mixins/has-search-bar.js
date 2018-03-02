@@ -1,8 +1,8 @@
 import {filterBy} from "@/utils";
-import SearchForm from '@/components/shared/search-form';
+import SearchBar from '@/components/shared/search-bar';
 
 export default {
-    components: {SearchForm},
+    components: {SearchBar},
     data() {
         return {
             q: '',
@@ -10,34 +10,45 @@ export default {
         }
     },
 
+    computed: {
+        regex() {
+            return new RegExp('in:(' + this.searchTerms.map(i => i.name).join('|') + ')', 'ig');
+        },
+    },
+
     methods: {
-        filterItems(items, searchTerms = []) {
+        filterItems(items) {
             if (!items.length) return [];
 
             const type = items[0].type;
-            const re = new RegExp('in:(' + searchTerms.map(i => i.name).join('|') +')', 'ig');
-            const fields = [];
-            const matches = this.q.match(re);
-
-            if (matches) {
-                this.q = this.q.replace(re, '').trim();
-                if (!this.q) {
-                    return items;
-                }
-                matches.forEach(match => {
-                    let field = match.split(':')[1].toLowerCase()
-                    let term = searchTerms.find(term => term.name === field);
-                    if (term.propertyName) {
-                        field = term.propertyName;
-                    }
-                    fields.push(`${type}.${field}`);
-                });
-            }
+            const fields = this.getFields(type);
 
             return filterBy(
                 items,
                 this.q,
                 ...(fields.length ? fields : [`${type}.name`]));
+        },
+
+        getFields(type) {
+            const fields = [];
+            const matches = this.q.match(this.regex);
+
+            if (matches && this.searchTerms.length) {
+                this.q = this.q.replace(this.regex, '').trim();
+                if (!this.q) return [];
+                matches.forEach(match => {
+                    fields.push(`${type}.${this.getField(match)}`);
+                });
+            }
+            return fields;
+        },
+
+        getField(match) {
+            let field = match.split(':')[1].toLowerCase()
+            let term = this.searchTerms.find(term => term.name === field);
+            if (term.propertyName) field = term.propertyName;
+
+            return field;
         }
     }
 }

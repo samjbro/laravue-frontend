@@ -1,8 +1,6 @@
 <template>
     <div class="main-scroll-wrap product-list-wrap">
-        <div class="search-bar">
-            <search-form :terms="searchTerms"/>
-        </div>
+        <search-bar :terms="searchTerms"/>
         <table>
             <thead>
             <tr>
@@ -57,7 +55,7 @@
         },
         computed: {
             filteredProducts() {
-                return this.filterItems(this.productRows, this.searchTerms);
+                return this.filterItems(this.productRows);
             },
 
         },

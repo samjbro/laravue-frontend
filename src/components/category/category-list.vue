@@ -1,7 +1,7 @@
 <template>
     <div class="main-scroll-wrap category-list-wrap">
         <div class="search-bar">
-            <search-form :terms="searchTerms"/>
+            <search-bar :terms="searchTerms"/>
         </div>
         <table>
             <thead>
@@ -25,10 +25,9 @@
     import {event, filterBy} from '@/utils';
     import HasSearchBar from '@/mixins/has-search-bar';
     import CategoryItem from './category-item';
-    import SearchForm from '@/components/shared/search-form';
 
     export default {
-        components: {CategoryItem, SearchForm},
+        components: {CategoryItem},
         mixins: [HasSearchBar],
         props: {
             items: {
