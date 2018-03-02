@@ -11,9 +11,11 @@
 </template>
 
 <script>
+    import Vue from 'vue';
     import {sharedStore, userStore} from '@/stores';
     import {ls} from '@/services';
     import {event, forceReloadWindow} from '@/utils';
+    import {focusDirective} from '@/directives';
     import MainWrapper from "@/components/main-wrapper.vue";
     import LoginForm from '@/components/auth/login-form.vue';
 
@@ -61,6 +63,8 @@
             })
         }
     }
+
+    Vue.directive('global-focus', focusDirective);
 </script>
 
 <style lang="scss">
