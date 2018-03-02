@@ -14,6 +14,13 @@
     import {event} from '@/utils';
 
     export default {
+        props: {
+          terms: {
+              type: Array,
+              required: false
+          }
+        },
+
         data() {
             return {
                 q: ''
@@ -22,7 +29,11 @@
 
         computed: {
           placeholder() {
-              return 'Filter results using in:name, in:category, in:part_no, in:price (defaults to in:name)';
+              let terms = this.terms.map(term => 'in:' + term.name).join(', ');
+
+              return this.terms.length
+                  ? 'Filter results using ' + terms
+                  : 'Search';
           }
         },
 

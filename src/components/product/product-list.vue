@@ -1,7 +1,7 @@
 <template>
     <div class="main-scroll-wrap product-list-wrap">
         <div class="search-bar">
-            <search-form :terms="searchTerms" />
+            <search-form :terms="searchTerms"/>
         </div>
         <table>
             <thead>
@@ -16,7 +16,7 @@
         <virtual-scroller
                 class="scroller"
                 content-tag="table"
-                :items="filteredItems"
+                :items="filteredProducts"
                 item-height="35"
                 :renderers="renderers"
         />
@@ -25,11 +25,11 @@
 
 <script>
     import {event, filterBy} from '@/utils';
+    import HasSearchBar from '@/mixins/has-search-bar';
     import ProductItem from './product-item';
-    import SearchForm from '@/components/shared/search-form';
 
     export default {
-        components: {SearchForm},
+        mixins: [HasSearchBar],
         props: {
             items: {
                 type: Array,
@@ -41,9 +41,13 @@
                 renderers: Object.freeze({
                     product: ProductItem
                 }),
-                q: '',
                 productRows: [],
-                searchTerms: ['name', 'category', 'part_no', 'price']
+                searchTerms: [
+                    {name: 'name'},
+                    {name: 'category', propertyName: 'category.name'},
+                    {name: 'part_no', propertyName: 'manufacturer_part_no'},
+                    {name: 'price'}
+                ]
             }
         },
         watch: {
@@ -52,31 +56,10 @@
             }
         },
         computed: {
-            filteredItems() {
-                const re = /in:(name|category|part_no|price)/ig;
-                const fields = [];
-                const matches = this.q.match(re);
+            filteredProducts() {
+                return this.filterItems(this.productRows, this.searchTerms);
+            },
 
-                if (matches) {
-                    this.q = this.q.replace(re, '').trim();
-                    if (!this.q) {
-                        return this.productRows;
-                    }
-                    matches.forEach(match => {
-                        console.log(match);
-                        let field = match.split(':')[1].toLowerCase()
-                        if (field === 'category') {
-                            field = 'category.name';
-                        }
-                        fields.push(`product.${field}`);
-                    });
-                }
-
-                return filterBy(
-                    this.productRows,
-                    this.q,
-                    ...(fields.length ? fields : ['product.name']));
-            }
         },
         methods: {
             render() {
@@ -106,11 +89,6 @@
     @import "~#/_variables";
     @import "~#/_mixins";
 
-    .search-bar {
-        height: 35px;
-        padding-bottom: 10px;
-    }
-
     .product-list-wrap {
         @include table-scroller();
 
@@ -133,7 +111,7 @@
         }
 
         .scroller {
-            top: 95px;
+            top: 84px;
         }
     }
 

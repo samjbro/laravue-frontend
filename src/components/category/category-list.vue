@@ -1,5 +1,8 @@
 <template>
     <div class="main-scroll-wrap category-list-wrap">
+        <div class="search-bar">
+            <search-form :terms="searchTerms"/>
+        </div>
         <table>
             <thead>
             <tr>
@@ -11,7 +14,7 @@
         <virtual-scroller
                 class="scroller"
                 content-tag="table"
-                :items="categoryRows"
+                :items="filteredCategories"
                 item-height="35"
                 :renderers="renderers"
         />
@@ -19,10 +22,14 @@
 </template>
 
 <script>
+    import {event, filterBy} from '@/utils';
+    import HasSearchBar from '@/mixins/has-search-bar';
     import CategoryItem from './category-item';
+    import SearchForm from '@/components/shared/search-form';
 
     export default {
-        components: {CategoryItem},
+        components: {CategoryItem, SearchForm},
+        mixins: [HasSearchBar],
         props: {
             items: {
                 type: Array,
@@ -34,12 +41,17 @@
                 renderers: Object.freeze({
                     category: CategoryItem
                 }),
-                categoryRows: []
+                categoryRows: [],
             }
         },
         watch: {
             items() {
                 this.render();
+            }
+        },
+        computed: {
+            filteredCategories() {
+                return this.filterItems(this.categoryRows);
             }
         },
         mounted() {
@@ -54,6 +66,14 @@
                     }
                 })
             }
+        },
+
+        created() {
+            event.on({
+                'filter:changed': q => {
+                    this.q = q;
+                }
+            });
         }
     }
 </script>
@@ -73,6 +93,9 @@
             &.product-amount {
                 width: 50%;
             }
+        }
+        .scroller {
+            top: 84px;
         }
     }
 </style>
