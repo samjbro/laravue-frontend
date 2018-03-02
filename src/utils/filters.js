@@ -1,6 +1,6 @@
 import {each, get} from 'lodash';
 
-export function filterBy (arr, search) {
+export function filterBy(arr, search, ...keys) {
     if (!search) {
         return arr;
     }
@@ -10,10 +10,11 @@ export function filterBy (arr, search) {
     const res = [];
 
     each(arr, item => {
-        console.log(item);
-        if (`${get(item, 'product.name')}`.toLowerCase().indexOf(search) !== -1) {
-            res.push(item);
-        }
+        each(keys, key => {
+            if (`${get(item, key)}`.toLowerCase().indexOf(search) !== -1) {
+                res.push(item);
+            }
+        });
     });
     return res;
 }

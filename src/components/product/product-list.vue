@@ -1,7 +1,7 @@
 <template>
     <div class="main-scroll-wrap product-list-wrap">
         <div class="search-bar">
-            <search-form/>
+            <search-form :terms="searchTerms" />
         </div>
         <table>
             <thead>
@@ -42,7 +42,8 @@
                     product: ProductItem
                 }),
                 q: '',
-                productRows: []
+                productRows: [],
+                searchTerms: ['name', 'category', 'part_no', 'price']
             }
         },
         watch: {
@@ -51,9 +52,31 @@
             }
         },
         computed: {
-          filteredItems() {
-              return filterBy(this.productRows, this.q);
-          }
+            filteredItems() {
+                const re = /in:(name|category|part_no|price)/ig;
+                const fields = [];
+                const matches = this.q.match(re);
+
+                if (matches) {
+                    this.q = this.q.replace(re, '').trim();
+                    if (!this.q) {
+                        return this.productRows;
+                    }
+                    matches.forEach(match => {
+                        console.log(match);
+                        let field = match.split(':')[1].toLowerCase()
+                        if (field === 'category') {
+                            field = 'category.name';
+                        }
+                        fields.push(`product.${field}`);
+                    });
+                }
+
+                return filterBy(
+                    this.productRows,
+                    this.q,
+                    ...(fields.length ? fields : ['product.name']));
+            }
         },
         methods: {
             render() {

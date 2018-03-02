@@ -1,7 +1,7 @@
 <template>
     <div class="search-form">
         <input type="text"
-               placeholder="Search"
+               :placeholder="placeholder"
                @input="filter"
                v-model="q"
                v-global-focus
@@ -18,6 +18,12 @@
             return {
                 q: ''
             }
+        },
+
+        computed: {
+          placeholder() {
+              return 'Filter results using in:name, in:category, in:part_no, in:price (defaults to in:name)';
+          }
         },
 
         methods: {
